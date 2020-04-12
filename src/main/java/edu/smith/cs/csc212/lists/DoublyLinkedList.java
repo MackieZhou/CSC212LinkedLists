@@ -4,7 +4,9 @@ import me.jjfoley.adt.ListADT;
 import me.jjfoley.adt.errors.*;
 
 /**
- * A Doubly-Linked List is a list based on nodes that know of their successor and predecessor.
+ * A Doubly-Linked List is a list based on nodes that know of their successor
+ * and predecessor.
+ * 
  * @author jfoley
  *
  * @param <T>
@@ -18,7 +20,7 @@ public class DoublyLinkedList<T> extends ListADT<T> {
 	 * This is a reference to the last node in this list.
 	 */
 	Node<T> end;
-	
+
 	/**
 	 * A doubly-linked list starts empty.
 	 */
@@ -26,10 +28,11 @@ public class DoublyLinkedList<T> extends ListADT<T> {
 		this.start = null;
 		this.end = null;
 	}
-	
+
 	/**
-	 * The node on any linked list should not be exposed.
-	 * Static means we don't need a "this" of DoublyLinkedList to make a node.
+	 * The node on any linked list should not be exposed. Static means we don't need
+	 * a "this" of DoublyLinkedList to make a node.
+	 * 
 	 * @param <T> the type of the values stored.
 	 */
 	static class Node<T> {
@@ -45,8 +48,10 @@ public class DoublyLinkedList<T> extends ListADT<T> {
 		 * What value is stored in this node?
 		 */
 		public T value;
+
 		/**
 		 * Create a node with no friends.
+		 * 
 		 * @param value - the value to put in it.
 		 */
 		public Node(T value) {
@@ -55,7 +60,6 @@ public class DoublyLinkedList<T> extends ListADT<T> {
 			this.after = null;
 		}
 	}
-	
 
 	@Override
 	public T removeFront() {
@@ -77,7 +81,14 @@ public class DoublyLinkedList<T> extends ListADT<T> {
 
 	@Override
 	public void addFront(T item) {
-		throw new TODOErr();
+		if (start == null) {
+			end = start = new Node<T>(item);
+		} else {
+			Node<T> second = start;
+			start = new Node<T>(item);
+			start.after = second;
+			second.before = start;
+		}
 	}
 
 	@Override
@@ -85,10 +96,10 @@ public class DoublyLinkedList<T> extends ListADT<T> {
 		if (end == null) {
 			start = end = new Node<T>(item);
 		} else {
-			Node<T> secondLast = end;
+			Node<T> secondToLast = end;
 			end = new Node<T>(item);
-			end.before = secondLast;
-			secondLast.after = end;
+			end.before = secondToLast;
+			secondToLast.after = end;
 		}
 	}
 
@@ -109,13 +120,13 @@ public class DoublyLinkedList<T> extends ListADT<T> {
 		checkNotEmpty();
 		throw new TODOErr();
 	}
-	
+
 	@Override
 	public T getIndex(int index) {
 		checkNotEmpty();
 		throw new TODOErr();
 	}
-	
+
 	public void setIndex(int index, T value) {
 		checkNotEmpty();
 		throw new TODOErr();
@@ -123,11 +134,15 @@ public class DoublyLinkedList<T> extends ListADT<T> {
 
 	@Override
 	public int size() {
-		throw new TODOErr();
+		int count = 0;
+		for (Node<T> n = this.start; n != null; n = n.after) {
+			count++;
+		}
+		return count;
 	}
 
 	@Override
 	public boolean isEmpty() {
-		return this.start == null;
+		return this.start == null && this.end == null;
 	}
 }
